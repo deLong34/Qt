@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!-- saved from url=(1546)https://r.mradx.net/h5/7C/74CD188D/19CEB2BB1F.html?link1=AADe9QEp5hCWSSigREl13PxUoS5h1gY_Eer9AKclKDUflBXg4gWPtvXCbp7ZXkxX-wKbItBKH7zuRcTkvfiO67lRlKN1CYdyWynWj_u3tSymS0Kt3db_t4uvsTr9H-xduMk1M7p27bXqamAVu0k8sbk_m1zLpzKi5Ea4U7S-AFsJ2n2INa7L-0B5AAAAeh8_i612XGjDK2IwpAHFiAlbhB0XRg4nkaDY1LMszifu4wpt83bD5bWHBoONG8uv8qmONpUh80tae8r5Ef6loUqeTrP3SvvKOonjHsmkg9f95_tdJWXlYTck7bNI-11VQ8jbXacz_2SKFmDeAjU6GJcuSoH-VDlEF-VP0c9CDYs&link2=&link3=&link4=&link5=&data=AADe9QEp5hCWSSigREl13PxUoS5h1gY_Eer9AKclKDUflBXg4gWPtvXCbp7ZXkxX-wKbItBKH7zuRcTkvfiO67lRlKN1CYdyWynWj_u3tSymS0Kt3db_t4uvsTr9H-xduMk1M7p27bXqamAVu0k8sbk_m1zLpzKi5Ea4U7S-AFsJ2n2INRQayG-ZAgAAZWQic3KBMz0vqSKq8fax_95rDJ8V-kSlpWSBV2381WUxDX3rs5J9U6YrbHj-2QS8SdzG_u2ZxhGGtzFDlLH3qudzb3es3WVo2BpsEZK0UoGNNDxvWeXnrb79eTTRtlHlUwOzPly2JgIFEX815lgO3OBuJqJ4tZQ26E0eB40mAgK1noO_BF48VExiWiu1wXfKeFoBwpSuYm5W3371F4Hohv5DToAg5Ov0lod6T69zerCrHKzDj8OQcP8X3DVQ22pd8tivaI_RBAmKQRINONWg-TDvIm8HQIFLJsM3J72geRc1R74wL8vfvzYxijnOHEo_5EL7NGNFPhMGRPVR42yATvrhl_drjza01UwVtVfA-hFi3h6nUq1gVlliUr64WNjf3qcSwh7mNxzvfYVOil7vqIv4cfkvJMm0mTaseHVcQDwFxaFHwtc8o60AqX7qxL1-SEsjfX87a4DqdVo4GXxufT5eKrC0yexEIRU2FAZmrkp169oZWmfUmbZqLDonNNoO6Me1Fe4nXOwlcno5XTcrX3nbwR09Okcnhc4LMALL69k9OjsmimNd7-3EALVI7V8KlwKaYGc0QybaIGECHsLD1rHV7dfVgaid3HwlT4-5njrE0q52Hb8JLtuxLhLPGNshU1wq6IQMEeoVsOIon1PhMEazm-z4j-g1HjO7iL_KX7KepaLO96vUig9ZkmxsOclfvNb8SsoIWdvvt69Vzjik8uOcET4nCKSm9h2WQlb3tateH8CMZ5q4SabbuktkV3EW5aEW-fdD5uLbr3yIjy2Th-0G_mi69Y8RDyuueXu4ptANYMbg0HXS7OK_0ZCFvQVI_ZXCIpabq7jKhBRtYuW6Iknn9g1wE7dcMTnbNFP5SgYCOxSBaYKejkNGtEtC9usi:2Vtzqxkvfg2 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+<meta name="authoring-tool" content="Adobe_Animate_CC">
+<meta name="ad.size" content="width=100%,height=250">
+<title>mytarget_trailer_AK_ThreeMusketeers_banner_x250</title>
+<script src="./createjs-2015.11.26.min.js"></script>
+<script src="./mytarget_trailer_AK_ThreeMusketeers_banner_x250.js"></script>
+<script>
+var canvas, stage, exportRoot;
+function init() {
+	canvas = document.getElementById("canvas");
+	var comp=AdobeAn.getComposition("B4B9EB6289E741498F0A08133A4D5118");
+	var lib=comp.getLibrary();
+	var loader = new createjs.LoadQueue(false);
+	loader.addEventListener("fileload", function(evt){handleFileLoad(evt,comp)});
+	loader.addEventListener("complete", function(evt){handleComplete(evt,comp)});
+	var lib=comp.getLibrary();
+	loader.loadManifest(lib.properties.manifest);
+}
+function handleFileLoad(evt, comp) {
+	var images=comp.getImages();	
+	if (evt && (evt.item.type == "image")) { images[evt.item.id] = evt.result; }	
+}
+function handleComplete(evt,comp) {
+	var lib=comp.getLibrary();
+	var ss=comp.getSpriteSheet();
+	var queue = evt.target;
+	var ssMetadata = lib.ssMetadata;
+	for(i=0; i<ssMetadata.length; i++) {
+		ss[ssMetadata[i].name] = new createjs.SpriteSheet( {"images": [queue.getResult(ssMetadata[i].name)], "frames": ssMetadata[i].frames} )
+	}
+	exportRoot = new lib.mytarget_trailer_AK_ThreeMusketeers_banner_x250();
+	stage = new lib.Stage(canvas);	
+	fnStartAnimation = function() {
+		stage.addChild(exportRoot);
+		createjs.Ticker.setFPS(lib.properties.fps);
+		createjs.Ticker.addEventListener("tick", stage);
+	}	    	
+	AdobeAn.compositionLoaded(lib.properties.id);
+	fnStartAnimation();
+}
+</script>
+</head>
+<body onload="init();" style="margin:0px;" marginwidth="0" marginheight="0">
+<a href="https://r.mail.ru/redir/AADe9QFXvneLQQQQS8RpIjrZ5fXWFkgr1QndB9gR9kkqvp8c2sk5ZKXMGOHaqJJqyHd-NNgred-P4Kbdw-xJ8ZduySnf3yFaV2tR79MH79Krpupl64Xeg92-sit4yasR66Voubtr4N0EWMOc5EufU66hAFAqinlv6ZoUOvT_DQ4u9gkcbDN8DSUTAwAAhz6DNoEBkf8Qgc7qG1PoZYqMiWTLcTrgoy_xwx0Y0OXNU9FskZiUiMLMf2kezTPzoNvBumVTYhg4DdgKEyW3RSROYZwVJU22MNqVM2ozI2WmBc96UlU84GmdJOpGUVwfenkIuDVA-XnHb62PnzXEVXtAsdwHaVxX0Q5G_vgTAuJpqncDuZq3JU_xY9TuNKymE0VALu4m86EL3-WDeIrC5Gm7VhoTYkAeyXxuzEK3Re_grT0e8U2HwUqFzvJf47zZ_ceYY8UbdmZRJYCYHjUzgN0MB-JK_-e8e2uEAJJCx5qgSRbJ3wd5fNV1mSYGbJAVePuTMTSeBZc-271Pmery1t-Sq3DQDQd5HeAgouTIu6uMEgAnPUk9Uz0GJam52bVtazHRBybm9PDYaGb1vuE-ezKZsGxamYcH-tKoAY1yuRnlJi4RYknSJ39eY95ZJ3igOoU0boBH3CvcdmlF3acF19WCTziY4mPVT11LP5u5c31xQUmyKcS4c4EfQo2k1KLESxOQsZTDFbvgmQQ7U8u3NOWXomGKIOtQW-WQUDyaDhD30Bq2yzeABLYVbgdsEk4x1dLXOgj2JbnC7LgjfSvCu3L1s2DovpE5VGuSWDd-Gj3P94o4wO3RNZIP2UXJHZJWNRllOoUlAMX704T5LIyuL2WlerX_m2Z_CrcoDqFd0wCCUuufgCrgwhE8-7HB6rvK-02CPtwp7WNvl0oP0tcF8K2WcHUXcooFakH0H2Z89xFE6bnP194FfiZo5N09DRfhvoL7Xg-tCLhcP4XQqtDTRaoGvCRqyBJ4PYDyfzt3pnB9DW4PdPM_LR8HlkYC0BuhzybW3YF32LY5H7ayENQe-DYQleZWQ1Couea3dubk0jnhhdC2bnwgh6E4RYW9sFscFiYSMXZyJNro5yF5TvzP2sviZYI2aTfq-xJzhkShoEvviHdbLjWCrtlxyeISsRwXj9Nfc2-8AMsCXc5KbPzykYaCIEqtq4vLMCNhmROAyk4DcJb5nXcy9dMb9tKBK93s7RYrV2aLtUW8QY44RceQkK6YTz7r_nOHKWf3QOidiyI:2Vtzqxkvfg2" target="_blank">
+	<canvas id="canvas" width="940" height="250" style="display: block; background-color: rgb(255, 255, 255); cursor: pointer; width: 940px;"></canvas>
+</a>
+
+</body></html>
