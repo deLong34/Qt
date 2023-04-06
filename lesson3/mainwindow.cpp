@@ -84,6 +84,8 @@ void MainWindow::on_pushButton_get_clicked()
     ui->lineEditUSD->setText(getData(html).at(0));
     ui->lineEditEUR->setText(getData(html).at(1));
     ui->lineEditOIL->setText(getData(html).at(2));
+    //-----2-----//
+    ui->lineEditW->setText(WethergetData(html));
 }
 
 QStringList MainWindow::getData(const QString &html)
