@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTranslator>
+#include <QEvent>
+#include <QShortcut>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,21 +17,32 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+protected:
+    void changeEvent(QEvent * event) override;
+  // void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
     void on_pushButton_info_clicked();
-
     void on_pushButton_open_clicked();
-
     void on_pushButton_save_clicked();
 
-    void on_pushButton_get_clicked();
+    void on_comboBox_currentIndexChanged(int index);
 
-    QStringList getData(const QString &html);
+    void slotShortcutCtrlO();
+    void slotShortcutCtrlN();
+    void slotShortcutCtrlS();
+    void slotShortcutCtrlQ();
 
-    QString WethergetData(const QString &html);
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
+    QTranslator translator;
+    QShortcut *keyCtrlO;
+    QShortcut *keyCtrlS;
+    QShortcut *keyCtrlN;
+    QShortcut *keyCtrlQ;
+
+
 };
 #endif // MAINWINDOW_H

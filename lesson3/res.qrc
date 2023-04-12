@@ -2,4 +2,8 @@
     <qresource prefix="/txt">
         <file>info.txt</file>
     </qresource>
+    <qresource prefix="/tr">
+        <file>QtLanguage_ru.qm</file>
+        <file>QtLanguage_en.qm</file>
+    </qresource>
 </RCC>

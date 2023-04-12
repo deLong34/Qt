@@ -3,13 +3,40 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QFileDialog>
-#include <QRegularExpression>
+#include <QTranslator>
+#include <QKeyEvent>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->label->setText(tr("Text Editor"));
+    ui->label_2->setText(tr("Language"));
+    ui->pushButton_open->setText(tr("Open"));
+    ui->pushButton_save->setText(tr("Save"));
+    ui->pushButton_info->setText(tr("Info"));
+    ui->radioButton->setText(tr("Read only"));
+    ui->comboBox->addItems(QStringList() << "Русский" << "English");
+    connect(ui->comboBox, &QComboBox::currentIndexChanged, this, &MainWindow::on_comboBox_currentIndexChanged);
+    //3
+    keyCtrlO = new QShortcut(this); //инициализация
+    keyCtrlO->setKey(Qt::CTRL + Qt::Key_O); //установка кода клавиш
+    connect(keyCtrlO, SIGNAL(activated()), this, SLOT(slotShortcutCtrlO()));
+
+    keyCtrlS = new QShortcut(this); //инициализация
+    keyCtrlS->setKey(Qt::CTRL + Qt::Key_S); //установка кода клавиш
+    connect(keyCtrlS, SIGNAL(activated()), this, SLOT(slotShortcutCtrlS()));
+
+    keyCtrlN = new QShortcut(this); //инициализация
+    keyCtrlN->setKey(Qt::CTRL + Qt::Key_N); //установка кода клавиш
+    connect(keyCtrlN, SIGNAL(activated()), this, SLOT(slotShortcutCtrlN()));
+
+    keyCtrlQ = new QShortcut(this); //инициализация
+    keyCtrlQ->setKey(Qt::CTRL + Qt::Key_Q); //установка кода клавиш
+    connect(keyCtrlQ, SIGNAL(activated()), this, SLOT(slotShortcutCtrlQ()));
+
 }
 
 MainWindow::~MainWindow()
@@ -33,17 +60,20 @@ void MainWindow::on_pushButton_info_clicked()
 void MainWindow::on_pushButton_open_clicked()
 {
     QString path = QFileDialog::getOpenFileName(this,
-                                                tr("Открыть файл"),
+                                                tr("Open file"),
                                                 "C:/gb/Qt/lesson3"
                                                 );
     if (path.isEmpty()) return;
+
     QFile file(path);
     if (file.open(QIODevice::ReadOnly)) {
         QByteArray ba = file.readAll();
         QString text(ba);
         ui->plainTextEdit->setPlainText(text);
-    }
-    else ui->plainTextEdit->setPlainText("No opened");
+    } 
+    else ui->plainTextEdit->setPlainText(tr("No opened"));
+    //устанавливаем режим "только для чтения" при нажатой radiobutton
+    if (ui->radioButton->isChecked()) ui->plainTextEdit->setReadOnly(true);
 }
 
 
@@ -59,77 +89,49 @@ void MainWindow::on_pushButton_save_clicked()
 }
 
 
-void MainWindow::on_pushButton_get_clicked()
+void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
-    QString path = QFileDialog::getOpenFileName(this,
-                                                tr("Открыть файл"),
-                                                "C:/gb/Qt/lesson3"
-                                                );
-    if (path.isEmpty()) {
-        ui->plainTextEdit_2->setPlainText("Ошибка!");
-        ui->lineEditUSD->clear();
-        ui->lineEditEUR->clear();
-        ui->lineEditOIL->clear();
-        ui->lineEditW->clear();
-        return;
-    }
-    QFile file(path);
-    if (file.open(QIODevice::ReadOnly)) {
-        QByteArray ba = file.readAll();
-        QString text(ba);
-        ui->plainTextEdit_2->setPlainText(text);
-    }
-    else ui->plainTextEdit_2->setPlainText("No opened");
-    QString html = ui->plainTextEdit_2->toPlainText();
-    ui->lineEditUSD->setText(getData(html).at(0));
-    ui->lineEditEUR->setText(getData(html).at(1));
-    ui->lineEditOIL->setText(getData(html).at(2));
-    //-----2-----//
-    ui->lineEditW->setText(WethergetData(html));
+  if (index == 0) translator.load(":/tr/QtLanguage_ru.qm");
+  if (index == 1) translator.load(":/tr/QtLanguage_en.qm");
+  qApp->installTranslator(&translator);
 }
 
-QStringList MainWindow::getData(const QString &html)
+void MainWindow::changeEvent(QEvent * event)
 {
-    QStringList list;
-    int lastPos = 0;
-    QString fnd = "<div class=\"rate__currency>";
-    QString begin = ">";
-    QString end = "</div>";
-    while (1) {
-            int pos = html.indexOf(fnd, lastPos);
-            //нашли индекс начала скрипта
-            if (pos == -1) return list;
-            //если не нашли начало - возвращаем список
-            int beginPos = pos + html.indexOf(begin, pos) + 1;
-            //нашли индекс начала данных
-            int endPos = beginPos + html.indexOf(end, beginPos);
-            //нашли индекс конца данных
-            QString data = html.mid(beginPos, endPos - beginPos);
-            //вынули данные из текста
-            lastPos = endPos;
-            list << data;
-            //поместили данные в список
-    }
-    //weather-temp">+18°</span>
+    if (event->type() == QEvent::LanguageChange) ui->retranslateUi(this);
 }
-QString MainWindow::WethergetData(const QString &html)
+
+//-----3-----//
+void MainWindow::slotShortcutCtrlO()
 {
-    QString data;
-    int lastPos = 0;
-    QString fnd = "weather-temp";
-    QString begin = ">";
-    QString end = "</span>";
-    int pos = html.indexOf(fnd, lastPos);
-    //нашли индекс начала скрипта
-    if (pos == -1) return data;
-    //если не нашли начало - возвращаем список
-    int beginPos = pos + html.indexOf(begin, pos) + 1;
-    //нашли индекс начала данных
-    int endPos = beginPos + html.indexOf(end, beginPos);
-    //нашли индекс конца данных
-    data = html.mid(beginPos, endPos - beginPos);
-    //вынули данные из текста
-    // lastPos = endPos;
-    return data;
+    MainWindow::on_pushButton_open_clicked();
+}
+
+void MainWindow::slotShortcutCtrlS()
+{
+    MainWindow::on_pushButton_save_clicked();
+}
+
+void MainWindow::slotShortcutCtrlN()
+{
+    QString path = "C:/gb/Qt/lesson3";
+    if (path.isEmpty()) return;
+
+    QFile file(path);
+    file.open(QIODevice::ReadOnly);
+    ui->plainTextEdit->setPlainText("");
+
+}
+
+void MainWindow::slotShortcutCtrlQ()
+{
+    qApp->exit();
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+   // keyCtrlF3 = new QShortcut(this); //инициализация
+    keyCtrlO->setKey(Qt::Key_F3); //установка кода клавиш
+    connect(keyCtrlO, SIGNAL(activated()), this, SLOT(slotShortcutCtrlO()));
 }
 
