@@ -27,6 +27,8 @@ private slots:
     void on_pushButton_save_clicked();
 
     void on_comboBox_currentIndexChanged(int index);
+//----5----//
+    void on_comboBox_style_currentIndexChanged(int index);
 
     void slotShortcutCtrlO();
     void slotShortcutCtrlN();

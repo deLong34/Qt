@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QTranslator>
 #include <QKeyEvent>
+#include "mywidget.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -20,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->radioButton->setText(tr("Read only"));
     ui->comboBox->addItems(QStringList() << "Русский" << "English");
     connect(ui->comboBox, &QComboBox::currentIndexChanged, this, &MainWindow::on_comboBox_currentIndexChanged);
+    //----5----//
+    ui->comboBox_style->addItems(QStringList() << tr("lite") << tr("dark"));
+    connect(ui->comboBox_style, &QComboBox::currentIndexChanged, this, &MainWindow::on_comboBox_style_currentIndexChanged);
     //3
     keyCtrlO = new QShortcut(this); //инициализация
     keyCtrlO->setKey(Qt::CTRL + Qt::Key_O); //установка кода клавиш
@@ -36,7 +40,9 @@ MainWindow::MainWindow(QWidget *parent)
     keyCtrlQ = new QShortcut(this); //инициализация
     keyCtrlQ->setKey(Qt::CTRL + Qt::Key_Q); //установка кода клавиш
     connect(keyCtrlQ, SIGNAL(activated()), this, SLOT(slotShortcutCtrlQ()));
-
+//-----5-------//
+    QWidget* mywgt = new myWidget(this);
+    mywgt->move(0,150);
 }
 
 MainWindow::~MainWindow()
@@ -99,6 +105,7 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
 void MainWindow::changeEvent(QEvent * event)
 {
     if (event->type() == QEvent::LanguageChange) ui->retranslateUi(this);
+    //if (event->type() == QEvent::StyleChange) ui->setupUi(this);
 }
 
 //-----3-----//
@@ -133,5 +140,25 @@ void MainWindow::on_pushButton_clicked()
    // keyCtrlF3 = new QShortcut(this); //инициализация
     keyCtrlO->setKey(Qt::Key_F3); //установка кода клавиш
     connect(keyCtrlO, SIGNAL(activated()), this, SLOT(slotShortcutCtrlO()));
+}
+
+void MainWindow::on_comboBox_style_currentIndexChanged(int index)
+{
+  if (index == 0)
+  {//светлая тема
+      setStyleSheet("QMainWindow { background-color: lightGray; color : black }"
+                    "QPushButton { background-color: lightGray; color : black }"
+                    "QPlainTextEdit { background-color: white; color : black }"
+                    "QLabel {  color : black }"
+                    "QRadioButton { color : black }");
+   }
+  if (index == 1)
+  {//тёмная тема
+      setStyleSheet("QMainWindow { background-color: black; color : white }"
+                    "QPushButton { background-color: darkGray; color : white }"
+                    "QPlainTextEdit { background-color: darkGray; color : white }"
+                    "QLabel {  color : white }"
+                    "QRadioButton {  color : grey }");
+  }
 }
 
