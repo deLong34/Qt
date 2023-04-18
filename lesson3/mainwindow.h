@@ -5,6 +5,7 @@
 #include <QTranslator>
 #include <QEvent>
 #include <QShortcut>
+#include <QMdiArea>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,20 +23,24 @@ protected:
   // void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
-    void on_pushButton_info_clicked();
-    void on_pushButton_open_clicked();
-    void on_pushButton_save_clicked();
+    void onPushButtonInfoClicked();
+    void onPushButtonOpenClicked();
+    void onPushButtonSaveClicked();
 
-    void on_comboBox_currentIndexChanged(int index);
+    //void on_comboBox_currentIndexChanged(int index);
 //----5----//
-    void on_comboBox_style_currentIndexChanged(int index);
-
+    //void on_comboBox_style_currentIndexChanged(int index);
     void slotShortcutCtrlO();
     void slotShortcutCtrlN();
     void slotShortcutCtrlS();
     void slotShortcutCtrlQ();
-
-    void on_pushButton_clicked();
+    //void on_pushButton_clicked();
+    void onPushButtonPrintClicked();
+//----6----//
+    void setRusLang();
+    void setEngLang();
+    void setLightThemeSlot();
+    void setDarkThemeSlot();
 
 private:
     Ui::MainWindow *ui;
@@ -44,6 +49,7 @@ private:
     QShortcut *keyCtrlS;
     QShortcut *keyCtrlN;
     QShortcut *keyCtrlQ;
+    QMdiArea *mdiArea;
 
 
 };

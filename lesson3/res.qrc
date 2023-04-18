@@ -6,4 +6,9 @@
         <file>QtLanguage_ru.qm</file>
         <file>QtLanguage_en.qm</file>
     </qresource>
+    <qresource prefix="/icon">
+        <file>Icons/open.png</file>
+        <file>Icons/print.png</file>
+        <file>Icons/save.png</file>
+    </qresource>
 </RCC>
