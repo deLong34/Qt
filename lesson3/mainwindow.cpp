@@ -12,6 +12,9 @@
 #include <QWidget>
 #include <QTextEdit>
 #include <QMdiSubWindow>
+#include <QToolBar>
+#include <QFontDialog>
+#include <QClipboard>
 #include "mywidget.h"
 
 
@@ -86,7 +89,6 @@ MainWindow::MainWindow(QWidget *parent)
    propMenu->addMenu(subMenuTheme);
    connect(setRusLang, SIGNAL(triggered()), this, SLOT(setRusLang()));
    connect(setEngLang, SIGNAL(triggered()), this, SLOT(setEngLang()));
-
 //6.3*
    mdiArea = new QMdiArea(this);
    QWidget *wgt = new QWidget(this);
@@ -97,11 +99,30 @@ MainWindow::MainWindow(QWidget *parent)
    layout->addWidget(printButton, 0,0,1,1);
    layout->addWidget(mdiArea, 1, 0, 10, 1);
    mdiArea->addSubWindow(new QTextEdit(this));
-   mdiArea->addSubWindow(new QTextEdit(this));
+//   mdiArea->addSubWindow(new QTextEdit(this));
    connect(printButton, SIGNAL(clicked()), this, SLOT(onPushButtonPrintClicked()));
    connect(pOpenAction, SIGNAL(triggered()), this, SLOT(onPushButtonOpenClicked()));
-
-
+//-----7.1-----//
+   QToolBar* toolBar = addToolBar("ToolBar");
+   QAction* fontAction = toolBar->addAction("Шрифт");
+   fontAction->setIcon(QPixmap(":/icon/Icons/font.png"));
+   connect(fontAction, SIGNAL(triggered()), this, SLOT(setFont()));
+   QAction* leftAlig = toolBar->addAction("Выровнять влево");
+   leftAlig->setIcon(QPixmap(":/icon/Icons/left.png"));
+   connect(leftAlig, SIGNAL(triggered()), this, SLOT(setLeftAlig()));
+   QAction* rightAlig = toolBar->addAction("Выровнять вправо");
+   rightAlig->setIcon(QPixmap(":/icon/Icons/right.png"));
+   connect(rightAlig, SIGNAL(triggered()), this, SLOT(setRightAlig()));
+   QAction* centerAlig = toolBar->addAction("Выровнять по центру");
+   centerAlig->setIcon(QPixmap(":/icon/Icons/center.png"));
+   connect(centerAlig, SIGNAL(triggered()), this, SLOT(setCenterAlig()));
+//копируем формат
+   QAction* getFormat = toolBar->addAction("getF");
+   getFormat->setIcon(QPixmap(":/icon/Icons/copy.png"));
+   connect(getFormat, SIGNAL(triggered()), this, SLOT(getFormat()));
+   QAction* pasteFormat = toolBar->addAction("pasteF");
+   pasteFormat->setIcon(QPixmap(":/icon/Icons/paste.png"));
+   connect(pasteFormat, SIGNAL(triggered()), this, SLOT(setFofmat()));
 }
 
 MainWindow::~MainWindow()
@@ -267,4 +288,59 @@ void MainWindow::setDarkThemeSlot() //тёмная тема
                   "QLabel {  color : white }"
                   "QRadioButton {  color : grey }");
 }
+
+void MainWindow::setFont()
+{
+   QTextEdit* textEdit = (QTextEdit*) mdiArea->activeSubWindow()->widget();
+//    QWidget* widget =activeSubWindow->widget();
+//    QTextEdit* textEdit = (QTextEdit*)widget;
+    QFont font = textEdit->textCursor().charFormat().font();
+    QFontDialog fntDlg(font, this);
+    bool b[] = {true};
+    font = fntDlg.getFont(b);
+    if (b[0])
+    {
+        QTextCharFormat fmt = textEdit->textCursor().charFormat();
+        fmt.setFont(font);
+        textEdit->textCursor().setCharFormat(fmt);
+    }
+}
+
+void MainWindow::setLeftAlig()
+{
+    QTextEdit* textEdit = (QTextEdit*) mdiArea->activeSubWindow()->widget();
+    textEdit->setAlignment(Qt::AlignLeft);
+}
+
+void MainWindow::setRightAlig()
+{
+    QTextEdit* textEdit = (QTextEdit*) mdiArea->activeSubWindow()->widget();
+    textEdit->setAlignment(Qt::AlignRight);
+}
+
+void MainWindow::setCenterAlig()
+{
+    QTextEdit* textEdit = (QTextEdit*) mdiArea->activeSubWindow()->widget();
+    textEdit->setAlignment(Qt::AlignCenter);
+}
+
+void MainWindow::getFormat()
+{
+    QTextEdit* textEdit = (QTextEdit*) mdiArea->activeSubWindow()->widget();
+    fmt = textEdit->textCursor().charFormat();
+}
+
+void MainWindow::setFofmat()
+{
+    QTextEdit* textEdit = (QTextEdit*) mdiArea->activeSubWindow()->widget();
+    textEdit->textCursor().setCharFormat(fmt);
+}
+
+//void MainWindow::setAlignment(Qt::Alignment alignment)
+//{
+//    QTextEdit* textEdit = (QTextEdit*) mdiArea->activeSubWindow()->widget();
+//    textEdit->setAlignment(alignment);
+//}
+
+
 

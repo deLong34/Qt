@@ -6,6 +6,7 @@
 #include <QEvent>
 #include <QShortcut>
 #include <QMdiArea>
+#include <QTextCharFormat>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -41,6 +42,14 @@ private slots:
     void setEngLang();
     void setLightThemeSlot();
     void setDarkThemeSlot();
+//----7----//
+    void setFont();
+    //void setAlignment(Qt::Alignment alignment);
+    void setLeftAlig();
+    void setRightAlig();
+    void setCenterAlig();
+    void getFormat();
+    void setFofmat();
 
 private:
     Ui::MainWindow *ui;
@@ -50,6 +59,8 @@ private:
     QShortcut *keyCtrlN;
     QShortcut *keyCtrlQ;
     QMdiArea *mdiArea;
+ //
+    QTextCharFormat fmt;
 
 
 };
