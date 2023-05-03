@@ -2,12 +2,17 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include "blockscheme.h"
+#include <QWidget>
+#include <QMultiMap>
+#include <QGraphicsView>
+#include <QGraphicsScene>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+
+class MainWindow : public QGraphicsView
 {
     Q_OBJECT
 
@@ -15,18 +20,34 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_3_clicked();
-
-    void on_pushButton_4_clicked();
-
-    void on_pushButton_5_clicked();
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void wheelEvent(QWheelEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
-    Ui::MainWindow *ui;
+    QPolygon makeStar();
+    void draw(QPainter& painter);
+    QGraphicsItem* findShape();
+    void deleteShape();
+
+private slots:
+    void reDraw();
+
+private:
+    QPointF currentPos_;
+    QList<BlockScheme*> shapes_;
+    QGraphicsItem* currentShape_ = nullptr;
+    QGraphicsScene* scene_ = nullptr;
+
+    enum FigureTypes
+    {
+        RECTANGLE = 0,
+        ELLIPSE = 1,
+        STAR = 2
+    };
+
+    int figureType_;
 };
 #endif // MAINWINDOW_H
