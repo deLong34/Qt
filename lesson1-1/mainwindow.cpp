@@ -1,86 +1,134 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+//#include "ui_mainwindow.h"
+#include <QPainter>
+#include <QPoint>
+#include <QGraphicsSceneMouseEvent>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QPainterPath>
+#include <QtMath>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QGraphicsView(parent)
 {
-    ui->setupUi(this);
+    this->setMinimumSize(960, 540);
+    figureType_ = FigureTypes::RECTANGLE;
+    scene_ = new QGraphicsScene(this);
+    scene_->setSceneRect(0, 0, 1920, 1080);
+    setScene(scene_);
+    srand(clock());
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
 }
 
-//-----1-----//
-void MainWindow::on_pushButton_clicked()
+void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    int a = ui->lineEdit->text().toInt();
-    int b = ui->lineEdit_2->text().toInt();
-    int c = ui->lineEdit_3->text().toInt();
-    int D = (b*b - 4*a*c);
-    if (a == 0)
+    currentPos_ = this->mapToScene(event->pos());
+    currentShape_ = findShape();
+
+    if (Qt::LeftButton == event->button() && !currentShape_)
     {
-        double x = -c / b;
-        QString answer = "х = " + QString::number(x);
-        ui->label_result1->setText(answer);
+        BlockScheme* shape;
+        if (FigureTypes::STAR != figureType_)
+        {
+            QPoint topLeft(currentPos_.toPoint().x(), currentPos_.toPoint().y());
+            QPoint botRight(currentPos_.toPoint().x() + scene_->width() / (5 + rand() % 5), currentPos_.toPoint().y() + scene_->height() / (5 + rand() % 5));
+            shape = new BlockScheme(scene_, figureType_, QPolygon(QRect(topLeft, botRight)));
+            shapes_.append(shape);
+            scene_->addItem(shapes_.last());
+        }
+        else
+        {
+            shape = new BlockScheme(scene_, figureType_, makeStar());
+            shapes_.append(shape);
+            scene_->addItem(shapes_.last());
+        }
+        connect(shape, &BlockScheme::reDraw, this, &MainWindow::reDraw);
     }
-    else if (D > 0)
+    else if (event->button() == Qt::RightButton)
     {
-        double x1 = (-b + qSqrt(D))/(2*a);
-        double x2 = (-b - qSqrt(D))/(2*a);
-        QString answer = "х1 = " + QString::number(x1) + "; x2 = " + QString::number(x2);
-        ui->label_result1->setText(answer);
+        if (currentShape_)
+        {
+            deleteShape();
+        }
     }
-    else if (D == 0)
-    {
-        double x = (-b)/(2*a);
-        QString answer = "х = " + QString::number(x);
-        ui->label_result1->setText(answer);
-    }
-    else ui->label_result1->setText("Нет корней");
+
+    QGraphicsView::mousePressEvent(event);
 }
 
-
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
-    int a = ui->lineEdit_4->text().toInt();
-    int b = ui->lineEdit_5->text().toInt();
-    int y = ui->lineEdit_6->text().toInt();
-    if (ui->radioButton->isChecked())
+    if (event->button() == Qt::RightButton || event->button() == Qt::MiddleButton)
     {
-       int c = qSqrt((a * a) + (b * b) - (2 * a * b * qCos(y)));
-       ui->label_result2->setText("с = " + QString::number(c));
+        return;
     }
-    else if (ui->radioButton_2->isChecked())
+
+    if (FigureTypes::STAR != figureType_ && !currentShape_)
     {
-        int c = qSqrt((a * a) + (b * b) - (2 * a * b * qCos(180*y/M_PI)));
-        ui->label_result2->setText("с = " + QString::number(c));
+        ++figureType_;
+    }
+    else if (!currentShape_)
+    {
+        figureType_ = FigureTypes::RECTANGLE;
+    }
+
+    QGraphicsView::mouseReleaseEvent(event);
+}
+
+void MainWindow::wheelEvent(QWheelEvent *event)
+{
+    const qreal scaleFactor = pow(2.0, event->angleDelta().y() / 240.0);
+    scale(scaleFactor, scaleFactor);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    const qreal scaleFactor = 0.5;
+    if (Qt::Key_Plus == event->key())
+    {
+        scale(scaleFactor + 1, scaleFactor + 1);
+    }
+    else if (Qt::Key_Minus == event->key())
+    {
+        scale(scaleFactor, scaleFactor);
     }
 }
 
-
-void MainWindow::on_pushButton_3_clicked()
+QPolygon MainWindow::makeStar()
 {
-    QString text1 = ui->plainTextEdit->toPlainText();
-    ui->plainTextEdit_2->appendPlainText(text1);
+    QPolygon star;
+
+    const int rays = 5;
+    const double angle = 2 * 3.14 / rays;
+    const int outerRadius = 40 + rand() % 100;
+    const int innerRadius = outerRadius / 2;
+
+    for (int i = 1; i <= rays; ++i)
+    {
+        star.append(currentPos_.toPoint() + QPoint(innerRadius * cos((i - 0.5) * angle),
+                                         innerRadius * sin((i - 0.5) * angle)));
+
+        star.append(currentPos_.toPoint() + QPoint(outerRadius * cos(i * angle),
+                                         outerRadius * sin(i * angle)));
+    }
+    return star;
 }
 
-
-void MainWindow::on_pushButton_4_clicked()
+QGraphicsItem* MainWindow::findShape()
 {
-    QString text1 = ui->plainTextEdit->toPlainText();
-    QString text2 = ui->plainTextEdit_2->toPlainText();
-    ui->plainTextEdit->setPlainText(text2);
-    ui->plainTextEdit_2->setPlainText(text1);
+    return scene_->itemAt(currentPos_, QTransform());
 }
 
-
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::deleteShape()
 {
-    const QString textHTML = "<font color='red'>Hello</font>";
-    ui->plainTextEdit->clear();
-    ui->plainTextEdit->appendHtml(textHTML);
+    scene_->removeItem(currentShape_);
+    currentShape_ = nullptr;
 }
 
+void MainWindow::reDraw()
+{
+    scene_->update();
+    this->update();
+}
