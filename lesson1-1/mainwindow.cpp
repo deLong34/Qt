@@ -107,11 +107,9 @@ QPolygon MainWindow::makeStar()
 
     for (int i = 1; i <= rays; ++i)
     {
-        star.append(currentPos_.toPoint() + QPoint(innerRadius * cos((i - 0.5) * angle),
-                                         innerRadius * sin((i - 0.5) * angle)));
-
+        star.append(currentPos_.toPoint() + QPoint(innerRadius * cos((i - 0.5) * angle),                     innerRadius * sin((i - 0.5) * angle)));
         star.append(currentPos_.toPoint() + QPoint(outerRadius * cos(i * angle),
-                                         outerRadius * sin(i * angle)));
+                    outerRadius * sin(i * angle)));
     }
     return star;
 }

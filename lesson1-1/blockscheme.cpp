@@ -3,31 +3,25 @@
 #include <QGraphicsSceneMouseEvent>
 
 BlockScheme::BlockScheme(QObject *parent)
-    : QObject{parent},
-      QGraphicsItem()
-{
-
-}
-
+    : QObject{parent}
+    , QGraphicsItem()
+{}
 BlockScheme::BlockScheme(QObject *parent, int fType, QPolygon shape)
     : QObject(parent),
       QGraphicsItem(),
       figure_(shape)
 {
     srand(clock());
-
     switch(fType)
     {
     case FigureTypes::RECTANGLE: fType_ = FigureTypes::RECTANGLE;
         break;
-
     case FigureTypes::ELLIPCE: fType_ = FigureTypes::ELLIPCE;
         break;
     case FigureTypes::STAR:
         fType_ = FigureTypes::STAR;
         break;
     }
-
     brush_.setColor(QColor(rand() % 256, rand() % 256, rand() % 256));
     brush_.setStyle(Qt::BrushStyle::SolidPattern);
     this->setTransformOriginPoint(figure_.boundingRect().center());
