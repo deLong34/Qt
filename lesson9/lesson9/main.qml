@@ -2,7 +2,9 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.5
 import com.vv.filectrl
-import "C:\gb\Qt\lesson9\lesson9\CustomButton.qml"
+import "C:/gb/Qt/lesson9/lesson9/CustomButton.qml"
+import "C:/gb/Qt/lesson9/lesson9//MessageDialog.qml"
+
 Window {
     id: root
     width: 640
@@ -13,16 +15,22 @@ Window {
     property string taskname_: qtaskname.text
     property string deadline_: qdeadline.text
     property int progress_: qprogress.value
+    property int count_: 0
 
-    TextField
+    MessageDialog
+    {
+        id: info
+    }
+
+    TextEdit
     {
         id: qtaskname
         width: 240
         font.family: "Arial"
         font.pixelSize: 14
-        placeholderText: "Enter task name"
+        text: "Enter task name"
         focus: true
-        //textMargin: 5
+        textMargin: 5
     }
 
     TextInput
@@ -35,6 +43,16 @@ Window {
         {
             regularExpression: /^(((0[1-9]|[12]\d|3[01])\.(0[13578]|1[02])\.((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\.(0[13456789]|1[012])\.((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\.02\.((19|[2-9]\d)\d{2}))|(29\.02\.((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|(([1][26]|[2468][048]|[3579][26])00))))$/g;
         }
+    }
+
+    TextEdit
+    {
+        id: qcount
+        text: "Tasks num: 0"
+        readOnly: false
+        font.pixelSize: 20
+        anchors.left: qtaskname.right
+        anchors.leftMargin: 40
     }
 
     Slider
@@ -56,6 +74,20 @@ Window {
             taskname_ = qtaskname.text;
             deadline_ = qdeadline.text;
             progress_ = qprogress.value;
+            if (taskname_.length == 0 || "Enter task name" == taskname_)
+            {
+                info.setInfo("Warning", "Please, enter task name");
+                info.show();
+                return;
+            }
+            if (deadline_.length < 10 || deadline_ == "dd.mm.yyyy")
+            {
+               info.setInfo("Warning", "Please, enter date in format dd.mm.yyyy");
+               info.show();
+               return;
+            }
+            qcount.remove(11, qcount.length);
+            qcount.insert(11, ++count_);
             filectrl.saveData(taskname_, deadline_, progress_);
         }
         anchors.top: qprogress.bottom
@@ -79,5 +111,11 @@ Window {
     FileController
     {
         id: filectrl
+        onInitEnd:
+        {
+            count_ = count;
+            qcount.remove(11, qcount.length);
+            qcount.insert(11,count);
+        }
     }
 }

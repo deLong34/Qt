@@ -15,8 +15,10 @@ public:
     Q_INVOKABLE
     void saveData(QString taskName, QString deadline, int progress);
     void writeDataVec(QString taskName, QString deadline, int progress);
+    void loadData();
 
 signals:
+    void initEnd(int count);
     void loadTask(QString taskName, QString deadline, int progress);
 
 private:

@@ -1,17 +1,12 @@
 #include "filecontroller.h"
 #include <QDebug>
+
 FileController::FileController(QObject *parent)
     : QObject{parent}
 {
     connect(this, &FileController::loadTask, this, &FileController::writeDataVec);
     file_ = new QFile("tasks_data.txt", this);
-    if (file_->open(QIODevice::ReadWrite))
-    {
-        while (file_->isOpen())
-        {
-            getNextTask();
-        }
-    }
+    loadData();
 }
 
 FileController::~FileController()
@@ -79,7 +74,23 @@ void FileController::saveData(QString taskName, QString deadline, int progress)
 
 void FileController::writeDataVec(QString taskName, QString deadline, int progress)
 {
+    if (taskNames_.contains(taskName))
+    {
+        return;
+    }
     taskNames_.append(taskName);
     deadlines_.append(deadline);
     progresses_.append(progress);
+}
+
+void FileController::loadData()
+{
+    if (file_->open(QIODevice::ReadWrite))
+    {
+        while (file_->isOpen())
+        {
+            getNextTask();
+        }
+    }
+    emit initEnd(taskNames_.count());
 }
