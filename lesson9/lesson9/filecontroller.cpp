@@ -1,5 +1,7 @@
 #include "filecontroller.h"
 #include <QDebug>
+#include <QSqlQuery>
+#include <QSqlRecord>
 
 FileController::FileController(QObject *parent)
     : QObject{parent}
@@ -93,4 +95,56 @@ void FileController::loadData()
         }
     }
     emit initEnd(taskNames_.count());
+}
+
+//-----11-----//
+bool FileController::createConnection()
+{
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("filecontroller.db");
+    if (!db.open()){
+        qDebug() << "Cannot open DB";
+        return false;
+    }
+    return true;
+}
+
+bool FileController::createTable()
+{
+    QSqlQuery query;
+    QString s = "CREATE TABLE filecontroller ("
+                "id INTEGER PRIMARY KEY NOT NULL,"
+                "taskNeme VARCHAR(15),"
+                "deadline VARCHAR(11),"
+                "progress INTEGER );";
+    if (!query.exec(s)) {
+        qDebug() << "Unable to create table";
+        return false;
+    }
+    return true;
+}
+
+bool FileController::insertRecord(QString taskName, QString deadline, int progress)
+{
+    QSqlQuery query;
+    QString s = "INSERT INTO filecontroller (taskNeme, deadline, progress) "
+            "VALUES('%1', '%2', '%3');";
+    QString q = s.arg(taskName).arg(deadline).arg(progress);
+    if (!query.exec(q)) {
+        qDebug() << "Unable to make operation";
+        return false;
+    }
+    return true;
+}
+
+void FileController::printTable()
+{
+    QSqlQuery query;
+    if(!query.exec("SELECT * FROM filecontroller;")){
+       qDebug() << "Unable to read table";
+    }
+    QSqlRecord rec = query.record();
+    while (query.next()){
+        //
+    }
 }

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QFile>
+#include <QSqlDatabase>
 
 class FileController : public QObject
 {
@@ -26,5 +27,11 @@ private:
     QVector<QString> taskNames_;
     QVector<QString> deadlines_;
     QVector<int> progresses_;
+    //11
+    QSqlDatabase db;
+    bool createConnection();
+    bool createTable();
+    bool insertRecord(QString taskName, QString deadline = "", int progress = 0);
+    void printTable();
 };
 #endif // FILECONTROLLER_H
